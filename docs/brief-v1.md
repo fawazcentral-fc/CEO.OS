@@ -92,11 +92,12 @@ I stuck. That is the feedback loop that builds trust in my own decisions.
 
 ## What we take from CEO Brain, and what we leave
 
-CEO Brain is the six-screen decision desk built in October 2026. It is the
-strongest evidence in this project: a complete, well-written system at saved
-revision 3, with zero daily entries, zero weekly reviews, every operating
-number blank, and every finance input blank. The decisions in it were seeded
-from documents, not made through it.
+CEO Brain is the six-screen decision desk built as a demo on 9 October 2026.
+It is complete and well written, and it is untested: no real decision has yet
+been made through it, and every number in it is blank. The take and leave
+lists below are predictions about what will survive daily use, not findings.
+The cheapest way to check them is to use the demo as-is for a week before
+building anything.
 
 Take:
 - The decision record shape above, almost verbatim.
@@ -112,9 +113,9 @@ Take:
 
 Leave, for now:
 - The scoring formula and the seventeen gates. Most gates need numbers that do
-  not exist, so the engine can only ever answer "Learn". A decision tool that
-  cannot produce a decision until a finance manager fills nine inputs is a tool
-  that stays on revision 3.
+  not exist today, so the engine can only answer "Learn" until they do. The
+  open question is whether forcing the numbers to exist is a feature or the
+  reason the tool will not get used. Only use will tell.
 - The four-step wizard with evidence typing. Replace with the decision record
   filled in directly. If a field is unknown, write "unknown".
 - Finance block, spendable cash, downside test, stage model, operating-number
@@ -165,6 +166,6 @@ measure only after return is proven.
   the constraint screen is the first thing I use, not the journal.
 - Does the weekly review happen without a reminder? If not, decide whether a
   single weekly prompt is acceptable or a slide toward a task manager.
-- Why did CEO Brain stall at revision 3? Hypothesis: it demanded numbers before
-  it gave anything back, and it had nowhere to put a thought. Confirm or correct
-  from memory of actually opening it.
+- One-week test of CEO Brain as-is, with a plain notes app as the journal.
+  Count: decisions made through the workspace, numbers filled, reviews saved,
+  and times I wanted to write a thought and had nowhere to put it.
