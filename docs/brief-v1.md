@@ -30,6 +30,11 @@ Second moment it serves: a new idea lands while I am on committed work. I see
 the constraint I am serving, note that the idea does not move it, park it in one
 line, and carry on.
 
+Third moment: I want to change a decision I already made. The system shows me
+what I decided, why, and the condition I said would justify changing it. If the
+condition is not met, I am looking at excitement, not evidence. I write the
+temptation down against the decision and keep going.
+
 ## Daily loop
 
 1. Write anything in the journal. Zero structure at write time.
@@ -51,10 +56,73 @@ met?
    that makes it binding, the one number, the one move. Plus a short queue of
    known next constraints. Parked ideas can attach to a constraint, current or
    queued.
-3. Decisions. What I decided, why, what would justify changing it, date.
-   Optionally linked to the journal entry it came from.
+3. Decisions. One record per decision, kept forever:
+   - Decision (title) and the one action it commits to
+   - Business, constraint it serves, the number it should move
+   - Why, as a short list
+   - Explicitly Not Now: what this decision rules out
+   - Reconsider only if: the evidence that would justify reopening
+   - Review date, within four weeks
+   - Status: Active, Standing, or Paused by [a later decision]
+   - Challenges: dated journal lines that argued against it, each marked
+     "meets the reconsider condition" or "does not"
+   A decision is never edited or deleted. Changed reality gets a new decision,
+   which pauses the old one and records what stops. Reopening requires naming
+   the new evidence first. Material, hard-to-reverse decisions get a 72-hour
+   cooling-off before they become active.
 4. Overview. One answer: which business gets my best hours this week, and why.
    The others are in maintenance mode by choice. Not a dashboard.
+
+## How sticking works
+
+Sticking to a decision is not willpower. It is four mechanisms:
+
+1. The active decision is visible on the screen I work from, every day.
+2. The reconsider condition is written in advance, so a new idea has to meet a
+   test I set when I was calm. Excitement is not evidence.
+3. Replacing a decision costs a little friction on purpose: name what stops,
+   name the new evidence, wait 72 hours if it is hard to reverse.
+4. The temptation gets a home instead of a fight. A competing idea is parked
+   as Not Now with a "revisit only when" trigger, or logged as a challenge
+   against the decision. Either way it is kept, not suppressed.
+
+At the weekly review I look at the challenges logged against the active
+decision. If none meets the reconsider condition, I stuck, and I can see that
+I stuck. That is the feedback loop that builds trust in my own decisions.
+
+## What we take from CEO Brain, and what we leave
+
+CEO Brain is the six-screen decision desk built in October 2026. It is the
+strongest evidence in this project: a complete, well-written system at saved
+revision 3, with zero daily entries, zero weekly reviews, every operating
+number blank, and every finance input blank. The decisions in it were seeded
+from documents, not made through it.
+
+Take:
+- The decision record shape above, almost verbatim.
+- The Focus card: constraint, number, move, owner, review date, on one screen.
+- Not Now as a lane with a "revisit only when" trigger. This is where parked
+  ideas live.
+- The commit moment: "This will become your active Move. Explicitly pause
+  improvement work on: [current Move]. The prior decision remains in memory."
+- "Reconsider with new evidence" as the only way to reopen.
+- The weekly question: did the constraint move? Boring is different from broken.
+- The voice of the copy. Reopen on evidence, not excitement. Is this important,
+  or is it interesting?
+
+Leave, for now:
+- The scoring formula and the seventeen gates. Most gates need numbers that do
+  not exist, so the engine can only ever answer "Learn". A decision tool that
+  cannot produce a decision until a finance manager fills nine inputs is a tool
+  that stays on revision 3.
+- The four-step wizard with evidence typing. Replace with the decision record
+  filled in directly. If a field is unknown, write "unknown".
+- Finance block, spendable cash, downside test, stage model, operating-number
+  tables. These are a mature-company shape. Each business gets one number.
+- Five lanes. Keep Now (the active decision) and Not Now (parked). Delegate,
+  Ignore and Done are a task manager wearing a strategy costume.
+- Eight review verdicts. Keep one question and a free-text answer.
+- Any screen with no place to write a plain thought. The journal is the fix.
 
 ## Structure
 
@@ -64,7 +132,8 @@ CEO Capacity and CEO Leadership are later layers built on the journal.
 
 ## Deferred, on purpose
 
-- Numbers beyond the one number per business.
+- Numbers beyond the one number per business. No finance inputs, no stage model.
+- Decision scoring, gates, evidence typing. Judgment stays with me.
 - Any AI.
 - Per-business thought sections, dashboards, charts.
 - Multi-founder accounts, sharing, product infrastructure.
@@ -96,3 +165,6 @@ measure only after return is proven.
   the constraint screen is the first thing I use, not the journal.
 - Does the weekly review happen without a reminder? If not, decide whether a
   single weekly prompt is acceptable or a slide toward a task manager.
+- Why did CEO Brain stall at revision 3? Hypothesis: it demanded numbers before
+  it gave anything back, and it had nowhere to put a thought. Confirm or correct
+  from memory of actually opening it.
