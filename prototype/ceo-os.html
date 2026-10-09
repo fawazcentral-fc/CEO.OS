@@ -1,241 +1,314 @@
 <title>CEO OS</title>
 <style>
-/* Layout: one column, max 920px, sticky top bar with four tabs; bottom tab bar on phones.
-   Visual language carried over from CEO Brain: near-black panels, warm off-white text, one muted gold. */
+/* Layout: fixed left sidebar (248px), thin top bar, centred 940px column, slide-over panels from the right.
+   Single dark look carried over from CEO Brain: near-black panels, warm off-white text, one muted gold. */
 :root {
   --bg: #0e1012; --panel: #17191c; --panel2: #1c1e22; --line: #2c2f33;
-  --fg: #f0eee9; --muted: #94979e; --gold: #d6b979; --gold-ink: #1a1508;
+  --fg: #f0eee9; --muted: #94979e; --gold: #d6b979; --gold-ink: #15120a; --gold-dim: rgba(214,185,121,.12);
   --green: #88b9a1; --amber: #d4b476; --red: #df8d88; --glow: #302a20;
   --display: Georgia, "Times New Roman", serif;
-  --body: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --body: Arial, Helvetica, -apple-system, "Segoe UI", sans-serif;
+  --sb: 248px;
   color-scheme: dark;
 }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #f4f1ea; --panel: #fffdf8; --panel2: #efeadf; --line: #d9d2c3;
-    --fg: #1b1a17; --muted: #6a6861; --gold: #8f6d1f; --gold-ink: #fffdf8;
-    --green: #3c7d60; --amber: #9a7420; --red: #b2423d; --glow: #efe5cf;
-    color-scheme: light;
-  }
-}
-:root[data-theme="light"] {
-  --bg: #f4f1ea; --panel: #fffdf8; --panel2: #efeadf; --line: #d9d2c3;
-  --fg: #1b1a17; --muted: #6a6861; --gold: #8f6d1f; --gold-ink: #fffdf8;
-  --green: #3c7d60; --amber: #9a7420; --red: #b2423d; --glow: #efe5cf;
-  color-scheme: light;
-}
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; }
-body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--body); margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 13px/1.55 var(--body); margin: 0; }
 button, input, select, textarea { font: inherit; color: inherit; }
-.wrap { max-width: 920px; margin: 0 auto; padding-block: 0 96px; padding-inline: 16px; }
-h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
-h1 { font-size: 30px; line-height: 1.15; }
-h2 { font-size: 22px; line-height: 1.2; }
-h3 { font-size: 17px; }
-.eyebrow { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+a { color: var(--gold); text-decoration: none; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: 42px; line-height: 1.08; letter-spacing: -0.02em; }
+h2 { font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 18px; line-height: 1.25; }
+.eyebrow { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+.eyebrow.grey { color: var(--muted); letter-spacing: 0.16em; font-size: 9px; }
 .muted { color: var(--muted); }
 .small { font-size: 12px; }
-.law { font-family: var(--display); font-size: 13px; color: var(--muted); }
-.law b { color: var(--gold); font-weight: 400; }
+.serif { font-family: var(--display); }
+.num { font-variant-numeric: tabular-nums; }
 
-/* top bar */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
-.top .wrap { padding-block: 14px 0; display: flex; flex-direction: column; gap: 10px; }
-.brand { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.brand .mono { font-family: var(--display); color: var(--gold); font-size: 20px; }
-.tabs { display: flex; gap: 2px; }
-.tab { background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 12px; color: var(--muted); cursor: pointer; display: flex; gap: 6px; align-items: center; }
-.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--gold); }
-.tab .n { font-size: 11px; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 0 6px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.tab:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* ---------- sidebar ---------- */
+.sidebar { position: fixed; inset: 0 auto 0 0; width: var(--sb); background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 22px 18px calc(18px + env(safe-area-inset-bottom, 0px)); gap: 22px; z-index: 20; overflow-y: auto; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo .mono { font-family: var(--display); color: var(--gold); font-size: 26px; line-height: 1; }
+.logo .name { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; line-height: 1.5; }
+.logo .name span { display: block; color: var(--muted); font-size: 9px; letter-spacing: 0.26em; }
+.ws { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 11px; color: var(--muted); align-self: flex-start; }
+.ws .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav .label { font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); padding: 0 10px 8px; }
+.nav button { display: flex; align-items: center; gap: 10px; background: none; border: 0; border-radius: 9px; padding: 9px 10px; color: var(--muted); cursor: pointer; text-align: left; width: 100%; }
+.nav button svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.nav button .cnt { margin-left: auto; font-size: 10px; color: var(--muted); }
+.nav button[aria-selected="true"] { color: var(--gold); background: var(--gold-dim); }
+.nav button[aria-selected="true"]::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); margin-left: 6px; }
+.nav button[aria-selected="true"] .cnt { color: var(--gold); }
+.law { padding: 0 10px; font-family: var(--display); font-size: 15px; line-height: 1.5; }
+.law .gold { color: var(--gold); }
+.law .sub { font-family: var(--body); font-size: 11px; color: var(--muted); margin-top: 6px; }
+.me { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px; border-top: 1px solid var(--line); }
+.me .av { width: 32px; height: 32px; border-radius: 50%; background: var(--panel2); border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--display); color: var(--gold); font-size: 12px; }
+.me .who { font-size: 12px; line-height: 1.3; }
+.me .who span { display: block; color: var(--muted); font-size: 11px; }
+.me svg { margin-left: auto; width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.5; }
 
-/* sections */
-section[role="tabpanel"] { padding-top: 22px; display: flex; flex-direction: column; gap: 18px; }
-.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
-.head p { margin: 4px 0 0; color: var(--muted); max-width: 60ch; }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 0; }
-.card.lead { background: linear-gradient(135deg, var(--panel) 55%, var(--glow)); }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.between { justify-content: space-between; }
-.stack { display: flex; flex-direction: column; gap: 8px; }
-.kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; align-items: baseline; }
-.kv dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
-.kv dd { margin: 0; min-width: 0; }
-.pill { display: inline-block; font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; color: var(--muted); white-space: nowrap; }
-.pill.active { color: var(--green); border-color: var(--green); }
-.pill.standing { color: var(--gold); border-color: var(--gold); }
-.pill.paused { color: var(--muted); text-decoration: line-through; }
-.pill.ex { color: var(--amber); border-color: var(--amber); }
-.pill.met { color: var(--red); border-color: var(--red); }
-.pill.notmet { color: var(--green); border-color: var(--green); }
-.code { font-family: var(--display); color: var(--gold); font-size: 12px; letter-spacing: 0.08em; }
+/* ---------- top bar + main ---------- */
+.main { margin-left: var(--sb); min-height: 100%; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 28px; font-size: 12px; color: var(--muted); }
+.topbar .crumb b { color: var(--fg); font-weight: 400; }
+.topbar .right { display: flex; align-items: center; gap: 14px; }
+.topbar .save { display: inline-flex; align-items: center; gap: 6px; }
+.topbar .save i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; }
+.topbar svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.col { width: 100%; max-width: 940px; margin: 0 auto; padding-block: 30px 40px; padding-inline: 28px; flex: 1; }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.ph { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.ph .rule { color: var(--muted); margin-top: 8px; max-width: 62ch; }
+.ph h1 { margin-top: 8px; }
+.footer { border-top: 1px solid var(--line); padding: 14px 28px calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; gap: 12px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.footer .r { display: inline-flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: 12px; font-family: var(--display); }
+.footer svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 
-/* controls */
-.btn { background: var(--gold); color: var(--gold-ink); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
-.btn.ghost { background: none; color: var(--gold); border: 1px solid var(--line); font-weight: 500; }
-.btn.quiet { background: none; color: var(--muted); border: 1px solid transparent; padding: 4px 8px; font-weight: 500; }
-.btn.quiet:hover { color: var(--fg); border-color: var(--line); }
+/* ---------- components ---------- */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-width: 0; }
+.card.lead { background: radial-gradient(120% 90% at 100% 0%, var(--glow) 0%, var(--panel) 55%); }
+.card .ct { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.card .ct .eyebrow { color: var(--muted); letter-spacing: 0.18em; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 0.06em; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; color: var(--muted); white-space: nowrap; text-transform: uppercase; }
+.tag.gold { color: var(--gold); border-color: var(--gold); }
+.tag.green { color: var(--green); border-color: var(--green); }
+.tag.amber { color: var(--amber); border-color: var(--amber); }
+.tag.red { color: var(--red); border-color: var(--red); }
+.tag.strike { text-decoration: line-through; }
+.btn { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--gold-ink); border: 0; border-radius: 9px; padding: 9px 16px; cursor: pointer; font-weight: 700; font-size: 13px; white-space: nowrap; }
+.btn::after { content: "→"; font-weight: 400; }
+.btn.noarrow::after { content: none; }
+.btn.link { background: none; color: var(--gold); padding: 4px 0; font-weight: 400; }
+.btn.quiet { background: none; color: var(--muted); border: 1px solid var(--line); padding: 5px 10px; font-weight: 400; font-size: 12px; }
+.btn.quiet::after { content: none; }
+.btn.quiet:hover { color: var(--fg); border-color: var(--muted); }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn:focus-visible, .nav button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, .chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.chip { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--muted); cursor: pointer; font-size: 12px; }
-.chip[aria-pressed="true"] { color: var(--fg); border-color: var(--gold); }
-textarea, input[type="text"], input[type="date"], select { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
-textarea { resize: vertical; min-height: 72px; }
-textarea.capture { min-height: 110px; font-size: 16px; line-height: 1.5; }
-label.f { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); min-width: 0; }
-label.f > span b { color: var(--red); font-weight: 400; }
-.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.chip { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; color: var(--muted); cursor: pointer; font-size: 12px; }
+.chip[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+textarea, input[type="text"], input[type="date"], select { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; color: var(--fg); }
+input::placeholder, textarea::placeholder { color: var(--muted); }
+textarea { resize: vertical; min-height: 80px; }
+label.f { display: flex; flex-direction: column; gap: 5px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 0; }
+label.f > span b { color: var(--gold); font-weight: 400; }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .form .full { grid-column: 1 / -1; }
-.err { color: var(--red); font-size: 12px; }
-.note { border-left: 2px solid var(--gold); padding-left: 10px; color: var(--muted); font-size: 13px; }
-.toast { position: fixed; left: 50%; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--panel); border: 1px solid var(--gold); color: var(--fg); padding: 8px 14px; border-radius: 999px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
-.toast.on { opacity: 1; }
+.errbox { background: rgba(223,141,136,.1); border: 1px solid var(--red); color: var(--red); border-radius: 9px; padding: 8px 12px; font-size: 12px; }
+.note { border-left: 2px solid var(--gold); padding-left: 12px; color: var(--muted); font-size: 12px; }
+.inset { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.kv { display: grid; grid-template-columns: 150px 1fr; gap: 10px 16px; align-items: start; }
+.kv dt { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+.kv dd { margin: 0; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.hero { font-family: var(--display); font-size: 40px; line-height: 1; letter-spacing: -0.02em; }
+.toast { position: fixed; right: 28px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--gold); color: var(--fg); padding: 10px 14px; border-radius: 10px; font-size: 12px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; pointer-events: none; z-index: 40; }
+.toast.on { opacity: 1; transform: none; }
+
+/* slide-over */
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 30; }
+.panel { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 100%; background: var(--panel); border-left: 1px solid var(--line); z-index: 31; overflow-y: auto; padding: 24px 22px calc(24px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 16px; }
+.panel .pt h2 { margin-top: 6px; }
+.panel .pt p { color: var(--muted); margin: 8px 0 0; font-size: 12px; }
+.panel .close { position: absolute; top: 16px; right: 16px; background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 8px; width: 30px; height: 30px; cursor: pointer; }
+.panel .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
 
 /* journal */
-.entry { border-top: 1px solid var(--line); padding: 14px 0; display: flex; flex-direction: column; gap: 8px; }
-.entry:first-of-type { border-top: 0; }
-.entry .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.entry .text { white-space: pre-wrap; max-width: 68ch; }
-.entry .add { padding-left: 12px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; white-space: pre-wrap; }
-.entry .acts { display: flex; gap: 2px; flex-wrap: wrap; }
-.inline { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.stat { font-family: var(--display); font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; }
+.capture { min-height: 120px; font-size: 16px; line-height: 1.55; background: transparent; border: 0; padding: 0; resize: vertical; }
+.capture:focus { outline: none; }
+.entry { border-top: 1px solid var(--line); padding: 16px 0; display: flex; flex-direction: column; gap: 8px; }
+.entry:first-child { border-top: 0; padding-top: 4px; }
+.entry .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+.entry .text { white-space: pre-wrap; max-width: 70ch; font-size: 14px; line-height: 1.6; }
+.entry .add { padding-left: 12px; border-left: 2px solid var(--line); color: var(--muted); font-size: 12.5px; white-space: pre-wrap; }
+.entry .acts { display: flex; gap: 14px; flex-wrap: wrap; }
+.entry .acts button { background: none; border: 0; padding: 0; color: var(--gold); cursor: pointer; font-size: 12px; }
+.entry .acts button:hover { text-decoration: underline; }
+.search { display: flex; align-items: center; gap: 10px; }
+.search input { max-width: 380px; }
+
+/* focus tiles */
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; cursor: pointer; }
+.tile[aria-pressed="true"] { border-color: var(--gold); }
+.tile .code { font-family: var(--display); color: var(--gold); font-size: 13px; letter-spacing: 0.1em; }
+.tile .nm { font-family: var(--display); font-size: 16px; }
+.strip { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 14px; font-size: 12px; color: var(--muted); }
 
 /* decisions */
-.drow { border-top: 1px solid var(--line); padding: 12px 0; cursor: pointer; }
-.drow:first-child { border-top: 0; }
-.drow .t { font-family: var(--display); font-size: 17px; }
-.drow .detail { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
-.box { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
-ul.plain { margin: 0; padding-left: 18px; }
-.challenge { display: flex; gap: 8px; align-items: baseline; font-size: 13px; }
+.drow { border-top: 1px solid var(--line); padding: 16px 0; cursor: pointer; }
+.drow:first-child { border-top: 0; padding-top: 4px; }
+.drow .t { font-family: var(--display); font-size: 19px; margin: 6px 0 2px; }
+.drow .detail { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.action-box { background: var(--gold-dim); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+ul.plain { margin: 4px 0 0; padding-left: 18px; }
+.challenge { display: flex; gap: 10px; align-items: baseline; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--line); }
+.challenge:first-of-type { border-top: 0; }
 
 /* parked */
-.prow { border-top: 1px solid var(--line); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
-.prow:first-child { border-top: 0; }
+.prow { border-top: 1px solid var(--line); padding: 16px 0; display: flex; flex-direction: column; gap: 6px; }
+.prow:first-child { border-top: 0; padding-top: 4px; }
+.prow .t { font-family: var(--display); font-size: 18px; }
 
-/* phone */
-@media (max-width: 640px) {
-  .top .tabs { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line); padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px)); justify-content: space-around; }
-  .tab { flex-direction: column; gap: 2px; font-size: 11px; padding: 6px 8px; border-bottom: 0; }
-  .tab[aria-selected="true"] { color: var(--gold); }
-  .kv { grid-template-columns: 1fr; gap: 2px 0; }
-  .kv dt { padding-top: 6px; }
-  h1 { font-size: 26px; }
+/* responsive */
+.menu { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); width: 32px; height: 32px; cursor: pointer; }
+@media (max-width: 1000px) {
+  :root { --sb: 0px; }
+  .sidebar { transform: translateX(-100%); transition: transform .2s; width: 268px; }
+  .sidebar.open { transform: none; }
+  .menu { display: inline-grid; place-items: center; }
+  .topbar { padding: 10px 16px; }
+  .col { padding-inline: 16px; }
+  .footer { padding-inline: 16px; }
 }
-@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+@media (max-width: 760px) {
+  h1 { font-size: 32px; }
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .kv { grid-template-columns: 1fr; gap: 2px 0; }
+  .kv dt { padding-top: 10px; }
+  .hero { font-size: 32px; }
+  .card { padding: 16px; }
+  .topbar .save, .topbar .right > svg { display: none; }
+  .topbar .right { white-space: nowrap; }
+  .toast { left: 16px; right: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .toast, .sidebar { transition: none; } }
 </style>
 
-<div class="top"><div class="wrap">
-  <div class="brand">
-    <div class="row"><span class="mono">Fc</span><span class="eyebrow">CEO OS · prototype</span></div>
-    <div class="law"><b>One Constraint.</b> One Number. One Move.</div>
+<aside class="sidebar" id="sidebar">
+  <div class="logo"><span class="mono">Fc</span><div class="name">CEO OS<span>FawazCentral</span></div></div>
+  <div class="ws"><span class="dot"></span>Private workspace <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+  <nav class="nav" role="tablist">
+    <div class="label">The operating desk</div>
+    <button role="tab" data-tab="journal"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Journal<span class="cnt" id="n-journal"></span></button>
+    <button role="tab" data-tab="focus"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Focus</button>
+    <button role="tab" data-tab="decisions"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M3 14l2-7 2 7a2 2 0 0 1-4 0Z"/><path d="M17 14l2-7 2 7a2 2 0 0 1-4 0Z"/></svg>Decisions<span class="cnt" id="n-decisions"></span></button>
+    <button role="tab" data-tab="parked"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>Parked<span class="cnt" id="n-parked"></span></button>
+  </nav>
+  <div class="nav">
+    <div class="label">The operating law</div>
+    <div class="law">One Constraint.<br>One Number.<br><span class="gold">One Move.</span><div class="sub">Make ambition sequential.</div></div>
   </div>
-  <div class="tabs" role="tablist">
-    <button class="tab" role="tab" data-tab="journal" aria-selected="true">Journal <span class="n" id="n-journal">0</span></button>
-    <button class="tab" role="tab" data-tab="focus">Focus</button>
-    <button class="tab" role="tab" data-tab="decisions">Decisions <span class="n" id="n-decisions">0</span></button>
-    <button class="tab" role="tab" data-tab="parked">Parked <span class="n" id="n-parked">0</span></button>
-  </div>
-</div></div>
+  <div class="me"><div class="av">FI</div><div class="who">Fawaz Ishola<span>Founder · portfolio view</span></div><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6Z"/></svg></div>
+</aside>
 
-<div class="wrap">
-
-<!-- JOURNAL -->
-<section role="tabpanel" id="p-journal">
-  <div class="head">
-    <div><div class="eyebrow">Self · the front door</div><h1>Write anything.</h1><p>No fields, no category, no business. Sort it later, or never. A vent never becomes a task.</p></div>
-    <div class="card" style="padding:10px 14px;text-align:right"><div class="stat" id="returns">0</div><div class="small muted">returns this week<br>to entries older than 7 days</div></div>
+<div class="main">
+  <div class="topbar">
+    <div class="row"><button class="menu" id="menu" aria-label="Menu">☰</button><span class="crumb">CEO OS <span class="muted">›</span> <b id="crumb">Journal</b></span></div>
+    <div class="right"><span class="save"><i></i><span id="savestate">All changes saved</span></span><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg><span id="today" class="num"></span></div>
   </div>
-  <div class="card lead stack">
-    <textarea class="capture" id="capture" placeholder="2am. What's on your mind?"></textarea>
-    <div class="row between">
-      <div class="chips" id="capture-biz"></div>
-      <button class="btn" id="save-entry">Keep it</button>
+  <div class="col">
+
+  <!-- JOURNAL -->
+  <section class="page" role="tabpanel" id="p-journal">
+    <div class="ph">
+      <div><div class="eyebrow">Bismillah · the journal</div><h1>Write anything.</h1><div class="rule">Everything can be captured. Nothing has to be committed. A vent never becomes a task.</div></div>
+      <div class="card" style="padding:12px 18px;text-align:right;min-width:170px"><div class="hero num" id="returns">0</div><div class="eyebrow grey" style="margin-top:6px">Returns this week</div><div class="small muted">to entries older than 7 days</div></div>
     </div>
-  </div>
-  <div class="row between">
-    <input type="text" id="search" placeholder="Search everything you've written" style="max-width:360px">
-    <span class="small muted" id="search-count"></span>
-  </div>
-  <div class="card" id="entries"></div>
-</section>
-
-<!-- FOCUS -->
-<section role="tabpanel" id="p-focus" hidden>
-  <div class="head">
-    <div><div class="eyebrow">CEO capacity · you are the constraint</div><h1>Who gets me this week?</h1><p>Each business has its own bottleneck. You have one set of best hours. The others are in maintenance by choice, not neglect.</p></div>
-  </div>
-  <div class="card lead">
-    <div class="form">
-      <label class="f"><span>This week, my best hours go to</span><select id="week-biz"></select></label>
-      <label class="f full"><span>Because</span><input type="text" id="week-why" placeholder="One sentence. Why this business, why now."></label>
+    <div class="card lead">
+      <div class="ct"><span class="eyebrow">01 / Lodge it</span><span class="tag" id="clock"></span></div>
+      <textarea class="capture" id="capture" placeholder="2am. What's on your mind?"></textarea>
+      <div class="strip"><div class="chips" id="capture-biz"></div><button class="btn" id="save-entry">Keep it</button></div>
     </div>
-  </div>
-  <div class="grid" id="biz-cards"></div>
-  <div class="card stack">
-    <div class="row between"><h3>Weekly check</h3><span class="small muted" id="review-count"></span></div>
-    <div class="note">Did the constraint move? Review execution before changing strategy. Boring is different from broken.</div>
-    <div class="form">
-      <label class="f"><span>Business</span><select id="rev-biz"></select></label>
-      <label class="f"><span>Did the number move?</span><select id="rev-moved"><option>Not enough evidence</option><option>Yes, keep the move</option><option>No, diagnose why</option><option>Constraint moved, reassess</option></select></label>
-      <label class="f full"><span>What actually happened, with the number if you have it</span><textarea id="rev-text"></textarea></label>
+    <div class="search"><input type="text" id="search" placeholder="Search everything you've written"><span class="small muted" id="search-count"></span></div>
+    <div class="card" id="entries"></div>
+  </section>
+
+  <!-- FOCUS -->
+  <section class="page" role="tabpanel" id="p-focus" hidden>
+    <div class="ph">
+      <div><div class="eyebrow">Attention is finite</div><h1>Give the right thing your best attention.</h1><div class="rule">Everything can matter. Everything cannot be the priority. One business gets your best hours this week. The others run on their maintenance floor by choice.</div></div>
+      <button class="btn" id="focus-new-decision">Make a decision</button>
     </div>
-    <div class="row between"><span class="small muted">A review never changes the move by itself. Changes go through a decision.</span><button class="btn ghost" id="save-review">Save check</button></div>
-    <div id="review-trail" class="stack"></div>
-  </div>
-</section>
+    <div class="grid3" id="biz-tiles"></div>
+    <div class="grid2">
+      <div class="card lead" id="bet"></div>
+      <div class="stack">
+        <div class="card" id="reality"></div>
+        <div class="card" id="week-card">
+          <div class="ct"><span class="eyebrow">This week</span><span class="tag green">has me</span></div>
+          <div class="stack">
+            <label class="f"><span>Best hours go to</span><select id="week-biz"></select></label>
+            <label class="f"><span>Because</span><input type="text" id="week-why" placeholder="One sentence. Why this business, why now."></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="review-card">
+      <div class="ct"><span class="eyebrow">Consistency is a review rhythm</span><span class="tag" id="review-count"></span></div>
+      <h3>Did the constraint move?</h3>
+      <div class="muted small" style="margin:4px 0 14px">Review execution before changing strategy. Boring is different from broken. A review never changes the move by itself.</div>
+      <div class="form">
+        <label class="f"><span>Business</span><select id="rev-biz"></select></label>
+        <label class="f"><span>Verdict</span><select id="rev-moved"><option>Not enough evidence</option><option>Working, keep the move</option><option>Non-execution, diagnose why</option><option>Constraint moved, reassess</option></select></label>
+        <label class="f full"><span>What actually happened, with the number if you have it</span><textarea id="rev-text"></textarea></label>
+      </div>
+      <div class="strip"><span>Changes go through a decision.</span><button class="btn noarrow" id="save-review">Save review</button></div>
+      <div id="review-trail" class="stack" style="margin-top:12px"></div>
+    </div>
+  </section>
 
-<!-- DECISIONS -->
-<section role="tabpanel" id="p-decisions">
-  <div class="head">
-    <div><div class="eyebrow">Reopen on evidence, not excitement</div><h1>Remember why you chose.</h1><p>History stays intact. Changed reality gets a new decision. Reopening needs the new evidence named first.</p></div>
-    <button class="btn" id="new-decision">New decision</button>
-  </div>
-  <div class="chips" id="dec-filter"></div>
-  <div id="decision-form-host"></div>
-  <div class="card" id="decisions"></div>
-</section>
+  <!-- DECISIONS -->
+  <section class="page" role="tabpanel" id="p-decisions" hidden>
+    <div class="ph">
+      <div><div class="eyebrow">Reopen on evidence</div><h1>Remember why you chose.</h1><div class="rule">History stays intact. Changed reality gets a new decision. Reopening needs the new evidence named first.</div></div>
+      <button class="btn" id="new-decision">New decision</button>
+    </div>
+    <div class="chips" id="dec-filter"></div>
+    <div class="card" id="decisions"></div>
+  </section>
 
-<!-- PARKED -->
-<section role="tabpanel" id="p-parked" hidden>
-  <div class="head">
-    <div><div class="eyebrow">Not now · good ideas can wait</div><h1>Kept, not killed.</h1><p>Each parked idea names the evidence that would earn it attention. It gets promoted only through a decision.</p></div>
-  </div>
-  <div class="card" id="parked"></div>
-</section>
+  <!-- PARKED -->
+  <section class="page" role="tabpanel" id="p-parked" hidden>
+    <div class="ph">
+      <div><div class="eyebrow">Good ideas can wait</div><h1>Kept, not killed.</h1><div class="rule">Preserve the idea and the evidence that would earn it attention. Promote it only through a decision.</div></div>
+    </div>
+    <div class="card" id="parked"></div>
+  </section>
 
+  </div>
+  <div class="footer"><span>FawazCentral / CEO OS</span><span class="r">Less noise. Better judgment. <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
 </div>
+
+<div id="overlay" hidden><div class="scrim" id="scrim"></div><div class="panel" id="panel" role="dialog" aria-modal="true"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 (function () {
-  const KEY = 'ceoos-proto-v1';
+  const KEY = 'ceoos-proto-v2';
   const DAY = 86400000;
   const now = () => Date.now();
   const ago = d => now() - d * DAY;
   const uid = () => Math.random().toString(36).slice(2, 9);
-  const fmt = ts => new Date(ts).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
-  const fmtT = ts => new Date(ts).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  const fmt = ts => new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const fmtT = ts => new Date(ts).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const $ = (q, el = document) => el.querySelector(q);
   const $$ = (q, el = document) => [...el.querySelectorAll(q)];
+  const iso = ts => new Date(ts).toISOString().slice(0, 10);
 
-  // ---------- seed (your three businesses and standing decisions, from CEO Brain; journal lines are examples) ----------
+  // ---------- seed: your three businesses and standing decisions from CEO Brain; journal lines are marked examples ----------
   function seed() {
     const lbd = 'LBD', ea = 'EA', os = 'OS';
     const d1 = uid(), d2 = uid(), d3 = uid(), d4 = uid();
     return {
       businesses: [
-        { id: lbd, name: 'Live By Design', code: 'FC', constraint: 'Qualified acquisition: consistent qualified bookings', evidence: 'Provisional. Confirm from the last 8 weeks of bookings, shows, closes, cash and delivery load.', number: 'Qualified CEO Diagnostic bookings / week', numberValue: 'unknown', next: ['Show rate and close rate on qualified calls', 'Delivery capacity without founder hours'] },
-        { id: ea, name: 'Executive Assistant company', code: 'EA', constraint: 'unknown', evidence: 'Reported performing well. No numbers filled.', number: 'Gross profit / month', numberValue: 'unknown', next: ['Owner independence from the founder'] },
-        { id: os, name: 'Operational systems venture', code: 'OS', constraint: 'Paid demand and repeated workflow proof', evidence: 'Stage A until paid proof. Building ability is ahead of market proof.', number: 'Paid pilots', numberValue: '0', next: ['Repeatable delivery of one narrow use case'] },
+        { id: lbd, name: 'FawazCentral / Live By Design', code: 'FC', role: 'Core cash flow + authority engine', constraint: 'Qualified acquisition: consistent qualified bookings', confirmed: false, evidence: 'Confirm from the last 8 weeks of bookings, shows, closes, cash and delivery load.', number: 'Qualified CEO Diagnostic bookings / week', numberValue: '', outcome: 'Repeatable qualified founder bookings that turn into predictable cash, without more founder delivery.', next: ['Show rate and close rate on qualified calls', 'Delivery capacity without founder hours'] },
+        { id: ea, name: 'Executive Assistant company', code: 'EA', role: 'Active service company · maintain through an owner', constraint: '', confirmed: false, evidence: 'Reported performing well. No numbers filled.', number: 'Gross profit / month', numberValue: '', outcome: 'Profit and retention reported by an owner, without founder hours.', next: ['Owner independence from the founder'] },
+        { id: os, name: 'Operational systems venture', code: 'OS', role: 'Option value · validation before infrastructure', constraint: 'Paid demand and repeated workflow proof', confirmed: false, evidence: 'Stage A until paid proof. Building ability is ahead of market proof.', number: 'Paid pilots', numberValue: '0', outcome: 'One narrow painful problem, paid for repeatedly.', next: ['Repeatable delivery of one narrow use case'] },
       ],
       week: { biz: lbd, why: 'Core cash flow and authority engine. The other two run through owners.' },
       decisions: [
-        { id: d4, ts: ago(3), biz: lbd, status: 'active', title: 'Confirm the funnel constraint before widening acquisition', action: 'Populate 8 weeks of qualified bookings, shows, closes, cash and delivery load before testing any new channel.', why: ['Acquisition is a hypothesis, not a confirmed bottleneck.', 'A low show or close rate would make more demand the wrong move.'], notNow: ['Extra channels', 'New offers'], reconsider: 'The 8-week data shows bookings are not the restricted step.', review: new Date(ago(-18)).toISOString().slice(0, 10), owner: 'CEO + Muhammad', hard: false, challenges: [] },
+        { id: d4, ts: ago(3), biz: lbd, status: 'active', title: 'Confirm the funnel constraint before widening acquisition', action: 'Populate 8 weeks of qualified bookings, shows, closes, cash and delivery load before testing any new channel.', why: ['Acquisition is a hypothesis, not a confirmed bottleneck.', 'A low show or close rate would make more demand the wrong move.'], notNow: ['Extra channels', 'New offers'], reconsider: 'The 8-week data shows bookings are not the restricted step.', review: iso(ago(-18)), owner: 'CEO + Muhammad', hard: false, challenges: [] },
         { id: d1, ts: ago(28), biz: lbd, status: 'standing', title: 'One ICP, two scenes', action: 'Lead with founder dependency; scattered founders remain a secondary scene.', why: ['Buyer evidence overlaps.', 'Two ICPs would split attention away from the growth constraint.'], notNow: ['Separate ICPs without buyer evidence'], reconsider: 'Different buyers, economics or delivery paths appear in application and sales data.', review: '', owner: 'CEO', hard: false, challenges: [] },
         { id: d2, ts: ago(26), biz: lbd, status: 'standing', title: 'Find and fix the #1 thing holding the business back', action: 'Use Find, Free, Attack. Lead with the business constraint, never generic productivity.', why: ['Avoids generic productivity demand.', 'Reflects how delivery actually works.'], notNow: ['Generic productivity positioning'], reconsider: 'Market evidence shows misunderstanding, or a better articulation improves qualified conversion.', review: '', owner: 'CEO', hard: false, challenges: [] },
         { id: d3, ts: ago(9), biz: os, status: 'standing', title: 'AI is the means, not the offer', action: 'Sell the operational business outcome. Use AI to deliver it.', why: ['Buyers value operational visibility and outcomes.'], notNow: ['Broad platform before a repeated use case'], reconsider: 'A market proves willingness to pay for the AI capability itself.', review: '', owner: 'CEO', hard: false, challenges: [] },
@@ -250,201 +323,232 @@ ul.plain { margin: 0; padding-left: 18px; }
         { id: uid(), ts: ago(10) + 7 * 3600000, biz: null, example: true, text: "Frustrated. Spent the morning fixing a portal design thing that nobody asked for. That's the third time this month. It isn't the constraint. I know it isn't the constraint.", adds: [] },
         { id: uid(), ts: ago(2) + 23 * 3600000, biz: ea, example: true, text: "EA company: I genuinely don't know what the bottleneck is. Performing well is not a number. Need the owner to tell me one number, not a report.", adds: [] },
       ],
-      reviews: [],
-      returns: [],
+      reviews: [], returns: [],
     };
   }
 
   let S;
   try { S = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { S = null; }
   if (!S || !S.businesses) S = seed();
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  let saveT;
+  function save() {
+    $('#savestate').textContent = 'Saving';
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    clearTimeout(saveT); saveT = setTimeout(() => $('#savestate').textContent = 'All changes saved', 600);
+  }
   const biz = id => S.businesses.find(b => b.id === id);
   const bizName = id => (biz(id) || {}).name || 'Personal';
+  const bizCode = id => (biz(id) || {}).code || '';
   const activeFor = id => S.decisions.find(d => d.biz === id && d.status === 'active');
 
   let toastT;
-  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2800); }
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 4500); }
+
+  // ---------- clock (Dubai time, as on CEO Brain) ----------
+  function tick() {
+    const d = new Date();
+    $('#today').textContent = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Dubai' });
+    $('#clock').textContent = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dubai' }) + ' Dubai';
+  }
+  tick(); setInterval(tick, 30000);
 
   // ---------- tabs ----------
+  const TITLES = { journal: 'Journal', focus: 'Focus', decisions: 'Decisions', parked: 'Parked' };
   function showTab(name) {
-    $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    $$('.nav [role=tab]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
     $$('section[role="tabpanel"]').forEach(s => s.hidden = s.id !== 'p-' + name);
+    $('#crumb').textContent = TITLES[name];
+    $('#sidebar').classList.remove('open');
     try { localStorage.setItem(KEY + ':tab', name); } catch (e) {}
     window.scrollTo({ top: 0 });
   }
-  $$('.tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+  $$('.nav [role=tab]').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+  $('#menu').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
+
+  // ---------- slide-over ----------
+  function openPanel(html) { $('#panel').innerHTML = `<button class="close" aria-label="Close">×</button>` + html; $('#overlay').hidden = false; $('.close', $('#panel')).addEventListener('click', closePanel); const f = $('input,textarea,select', $('#panel')); if (f) f.focus(); }
+  function closePanel() { $('#overlay').hidden = true; $('#panel').innerHTML = ''; }
+  $('#scrim').addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#overlay').hidden) closePanel(); });
+  const bizOpts = sel => S.businesses.map(b => `<option value="${b.id}" ${sel === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('');
 
   // ---------- journal ----------
   let captureBiz = null, search = '';
-  function bizChips(host, current, onPick, allowNone = true) {
-    host.innerHTML = (allowNone ? `<button class="chip" aria-pressed="${current === null}" data-b="">Personal</button>` : '') +
-      S.businesses.map(b => `<button class="chip" aria-pressed="${current === b.id}" data-b="${b.id}">${esc(b.name)}</button>`).join('');
-    $$('.chip', host).forEach(c => c.addEventListener('click', () => onPick(c.dataset.b || null)));
+  function renderCaptureChips() {
+    const host = $('#capture-biz');
+    host.innerHTML = `<button class="chip" aria-pressed="${captureBiz === null}" data-b="">Personal</button>` + S.businesses.map(b => `<button class="chip" aria-pressed="${captureBiz === b.id}" data-b="${b.id}">${esc(b.code)}</button>`).join('');
+    $$('.chip', host).forEach(c => c.addEventListener('click', () => { captureBiz = c.dataset.b || null; renderCaptureChips(); }));
   }
-  function renderCaptureChips() { bizChips($('#capture-biz'), captureBiz, b => { captureBiz = b; renderCaptureChips(); }); }
   $('#save-entry').addEventListener('click', () => {
     const text = $('#capture').value.trim();
     if (!text) { $('#capture').focus(); return; }
     S.entries.unshift({ id: uid(), ts: now(), biz: captureBiz, text, adds: [] });
-    $('#capture').value = ''; captureBiz = null; renderCaptureChips(); save(); renderAll(); toast('Kept. Nothing else is required.');
+    $('#capture').value = ''; captureBiz = null; save(); renderAll(); toast('Kept. Nothing else is required.');
   });
   $('#capture').addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') $('#save-entry').click(); });
   $('#search').addEventListener('input', e => { search = e.target.value.trim().toLowerCase(); renderEntries(); });
 
-  function countReturn(entry) {
-    if (now() - entry.ts < 7 * DAY) return;
-    S.returns.push(now());
-    S.returns = S.returns.filter(t => now() - t < 7 * DAY);
-  }
-  function returnsThisWeek() { return S.returns.filter(t => now() - t < 7 * DAY).length; }
+  function countReturn(entry) { if (now() - entry.ts < 7 * DAY) return; S.returns.push(now()); S.returns = S.returns.filter(t => now() - t < 7 * DAY); }
+  const returnsThisWeek = () => S.returns.filter(t => now() - t < 7 * DAY).length;
 
   function renderEntries() {
     const host = $('#entries');
     const list = S.entries.filter(e => !search || (e.text + ' ' + (e.adds || []).map(a => a.text).join(' ') + ' ' + bizName(e.biz)).toLowerCase().includes(search));
-    $('#search-count').textContent = search ? `${list.length} of ${S.entries.length}` : '';
+    $('#search-count').textContent = search ? `${list.length} of ${S.entries.length}` : `${S.entries.length} entries`;
     if (!list.length) { host.innerHTML = `<div class="muted">Nothing here yet. Write the first line above.</div>`; return; }
     host.innerHTML = list.map(e => `
       <div class="entry" data-id="${e.id}">
-        <div class="meta"><span>${fmtT(e.ts)}</span>${e.biz ? `<span class="pill">${esc(bizName(e.biz))}</span>` : ''}${e.example ? `<span class="pill ex">example</span>` : ''}${e.lifted ? `<span class="pill">${esc(e.lifted)}</span>` : ''}${now() - e.ts > 7 * DAY ? `<span class="small muted">${Math.floor((now() - e.ts) / DAY)}d old</span>` : ''}</div>
+        <div class="meta num"><span>${fmtT(e.ts)}</span>${e.biz ? `<span class="tag">${esc(bizCode(e.biz))}</span>` : ''}${e.example ? `<span class="tag amber">example</span>` : ''}${e.lifted ? `<span class="tag gold">${esc(e.lifted)}</span>` : ''}${now() - e.ts > 7 * DAY ? `<span>${Math.floor((now() - e.ts) / DAY)} days old</span>` : ''}</div>
         <div class="text">${esc(e.text)}</div>
         ${(e.adds || []).map(a => `<div class="add">${fmt(a.ts)} · ${esc(a.text)}</div>`).join('')}
-        <div class="acts">
-          <button class="btn quiet" data-act="add">Add to this</button>
-          <button class="btn quiet" data-act="park">Park it</button>
-          <button class="btn quiet" data-act="decide">Make it a decision</button>
-          <button class="btn quiet" data-act="challenge">It argues with a decision</button>
-        </div>
-        <div class="inline" hidden data-form></div>
+        <div class="acts"><button data-act="add">Add to this</button><button data-act="park">Park it</button><button data-act="decide">Make it a decision</button><button data-act="challenge">It argues with a decision</button></div>
       </div>`).join('');
     $$('.entry', host).forEach(el => {
       const e = S.entries.find(x => x.id === el.dataset.id);
-      $$('[data-act]', el).forEach(b => b.addEventListener('click', () => openEntryForm(e, el, b.dataset.act)));
+      $$('[data-act]', el).forEach(b => b.addEventListener('click', () => entryAction(e, b.dataset.act)));
     });
   }
 
-  function openEntryForm(e, el, act) {
-    const f = $('[data-form]', el);
-    if (!f.hidden && f.dataset.act === act) { f.hidden = true; return; }
-    f.hidden = false; f.dataset.act = act;
-    const bizOpts = sel => S.businesses.map(b => `<option value="${b.id}" ${sel === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('');
+  function entryAction(e, act) {
     if (act === 'add') {
-      f.innerHTML = `<label class="f"><span>Add a dated line. The original stays as written.</span><textarea data-k="text"></textarea></label><div class="row between"><span class="small muted">${now() - e.ts > 7 * DAY ? 'This counts as a return.' : 'Entries older than 7 days count as returns.'}</span><button class="btn">Add</button></div>`;
-      $('.btn', f).addEventListener('click', () => { const t = $('[data-k=text]', f).value.trim(); if (!t) return; e.adds = e.adds || []; e.adds.push({ ts: now(), text: t }); countReturn(e); save(); renderAll(); toast('Added.'); });
+      openPanel(`<div class="pt"><div class="eyebrow">Return to it</div><h2>Add a dated line.</h2><p>The original stays as written. ${now() - e.ts > 7 * DAY ? 'This entry is older than 7 days, so this counts as a return.' : 'Returns to entries older than 7 days are counted.'}</p></div>
+        <div class="inset small muted">${esc(e.text)}</div>
+        <label class="f"><span>What do you think now</span><textarea data-k="text"></textarea></label>
+        <div class="foot"><span></span><button class="btn">Add</button></div>`);
+      $('.foot .btn', $('#panel')).addEventListener('click', () => { const t = $('[data-k=text]', $('#panel')).value.trim(); if (!t) return; e.adds = e.adds || []; e.adds.push({ ts: now(), text: t }); countReturn(e); save(); renderAll(); closePanel(); toast('Added. Entry updated.'); });
     }
     if (act === 'park') {
       const b = e.biz || S.businesses[0].id;
-      f.innerHTML = `<div class="note">Parking is not committing. Name the evidence that would earn this attention later.</div><div class="form">
-        <label class="f full"><span>The idea, in one line</span><input type="text" data-k="title" value="${esc(e.text.slice(0, 90))}"></label>
+      openPanel(`<div class="pt"><div class="eyebrow">Not now</div><h2>Park it, with its trigger.</h2><p>Parking is not committing. Name the evidence that would earn this idea attention later.</p></div>
+        <label class="f"><span>The idea, in one line</span><input type="text" data-k="title" value="${esc(e.text.slice(0, 90))}"></label>
         <label class="f"><span>Business</span><select data-k="biz">${bizOpts(b)}</select></label>
-        <label class="f"><span>Belongs to constraint</span><select data-k="constraint"></select></label>
-        <label class="f full"><span>Revisit only when <b>required</b></span><input type="text" data-k="trigger" placeholder="e.g. the current channel works repeatedly and capacity is the constraint"></label></div>
-        <div class="row between"><span class="err" data-err></span><button class="btn">Park it</button></div>`;
-      const fillC = () => { const bb = biz($('[data-k=biz]', f).value); $('[data-k=constraint]', f).innerHTML = [bb.constraint, ...bb.next].map(c => `<option>${esc(c)}</option>`).join(''); };
-      fillC(); $('[data-k=biz]', f).addEventListener('change', fillC);
-      $('.btn', f).addEventListener('click', () => {
-        const trigger = $('[data-k=trigger]', f).value.trim(); if (!trigger) { $('[data-err]', f).textContent = 'A parked idea needs its revisit condition.'; return; }
-        S.parked.unshift({ id: uid(), ts: now(), biz: $('[data-k=biz]', f).value, title: $('[data-k=title]', f).value.trim(), trigger, constraint: $('[data-k=constraint]', f).value, from: e.id });
-        e.lifted = 'parked'; countReturn(e); save(); renderAll(); toast('Parked. It will be there when the trigger is.');
+        <label class="f"><span>Waits on constraint</span><select data-k="constraint"></select></label>
+        <label class="f"><span>Revisit only when <b>required</b></span><input type="text" data-k="trigger" placeholder="e.g. the current channel works repeatedly and capacity is the constraint"></label>
+        <div class="errbox" hidden data-err></div>
+        <div class="foot"><span class="small muted">Promotion only through a decision.</span><button class="btn">Park it</button></div>`);
+      const p = $('#panel');
+      const fillC = () => { const bb = biz($('[data-k=biz]', p).value); $('[data-k=constraint]', p).innerHTML = [bb.constraint || 'unknown constraint', ...bb.next].map(c => `<option>${esc(c)}</option>`).join(''); };
+      fillC(); $('[data-k=biz]', p).addEventListener('change', fillC);
+      $('.foot .btn', p).addEventListener('click', () => {
+        const trigger = $('[data-k=trigger]', p).value.trim(); const err = $('[data-err]', p);
+        if (!trigger) { err.hidden = false; err.textContent = 'A parked idea needs its revisit condition.'; return; }
+        S.parked.unshift({ id: uid(), ts: now(), biz: $('[data-k=biz]', p).value, title: $('[data-k=title]', p).value.trim(), trigger, constraint: $('[data-k=constraint]', p).value, from: e.id });
+        e.lifted = 'parked'; countReturn(e); save(); renderAll(); closePanel(); toast('Parked. It will be there when the trigger is.');
       });
     }
-    if (act === 'decide') {
-      f.innerHTML = ''; f.hidden = true; e.lifted = e.lifted || 'decision draft'; countReturn(e); save();
-      showTab('decisions'); openDecisionForm({ biz: e.biz || S.businesses[0].id, title: e.text.slice(0, 80), from: e.id });
-    }
+    if (act === 'decide') { countReturn(e); openDecisionForm({ biz: e.biz || S.businesses[0].id, title: e.text.slice(0, 80), from: e.id }); }
     if (act === 'challenge') {
       const actives = S.decisions.filter(d => d.status !== 'paused');
-      f.innerHTML = `<div class="note">Does this meet the reconsider condition you set when you were calm? If not, it is excitement, and it is still kept.</div><div class="form">
-        <label class="f full"><span>Which decision does it argue with</span><select data-k="dec">${actives.map(d => `<option value="${d.id}">${esc(d.title)} · ${esc(bizName(d.biz))}</option>`).join('')}</select></label>
-        <div class="full box small" data-cond></div>
-        <label class="f full"><span>Verdict</span><select data-k="met"><option value="no">Does not meet the reconsider condition. Decision stands.</option><option value="yes">Meets it. Reconsider with this as the new evidence.</option></select></label></div>
-        <div class="row between"><span></span><button class="btn">Log the challenge</button></div>`;
-      const showCond = () => { const d = S.decisions.find(x => x.id === $('[data-k=dec]', f).value); $('[data-cond]', f).innerHTML = `<span class="eyebrow">Reconsider only if</span><br>${esc(d.reconsider)}`; };
-      showCond(); $('[data-k=dec]', f).addEventListener('change', showCond);
-      $('.btn', f).addEventListener('click', () => {
-        const d = S.decisions.find(x => x.id === $('[data-k=dec]', f).value); const met = $('[data-k=met]', f).value === 'yes';
+      openPanel(`<div class="pt"><div class="eyebrow">The founder check</div><h2>Is this important, or is it interesting?</h2><p>Does this thought meet the reconsider condition you set when you were calm? If not, it is excitement. It is still kept.</p></div>
+        <div class="inset small muted">${esc(e.text)}</div>
+        <label class="f"><span>It argues with</span><select data-k="dec">${actives.map(d => `<option value="${d.id}">${esc(d.title)} · ${esc(bizCode(d.biz))}</option>`).join('')}</select></label>
+        <div class="inset small" data-cond></div>
+        <label class="f"><span>Verdict</span><select data-k="met"><option value="no">Does not meet the condition. Decision stands.</option><option value="yes">Meets it. Reconsider with this as the new evidence.</option></select></label>
+        <div class="foot"><span></span><button class="btn noarrow">Log the challenge</button></div>`);
+      const p = $('#panel');
+      const showCond = () => { const d = S.decisions.find(x => x.id === $('[data-k=dec]', p).value); $('[data-cond]', p).innerHTML = `<span class="eyebrow">Reconsider only if</span><div style="margin-top:4px">${esc(d.reconsider)}</div>`; };
+      showCond(); $('[data-k=dec]', p).addEventListener('change', showCond);
+      $('.foot .btn', p).addEventListener('click', () => {
+        const d = S.decisions.find(x => x.id === $('[data-k=dec]', p).value); const met = $('[data-k=met]', p).value === 'yes';
         d.challenges.push({ ts: now(), text: e.text.slice(0, 160), met, from: e.id });
-        e.lifted = met ? 'challenge: met' : 'challenge: stands'; countReturn(e); save(); renderAll();
+        e.lifted = met ? 'challenge · met' : 'challenge · stood'; countReturn(e); save(); renderAll(); closePanel();
         toast(met ? 'Logged. Open the decision to reconsider it.' : 'Logged. The decision stands, and so does the thought.');
       });
     }
   }
 
   // ---------- focus ----------
+  let focusBiz = null;
   function renderFocus() {
-    const wb = $('#week-biz'); wb.innerHTML = S.businesses.map(b => `<option value="${b.id}" ${S.week.biz === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('');
-    $('#week-why').value = S.week.why || '';
-    const rb = $('#rev-biz'); rb.innerHTML = wb.innerHTML;
-    $('#biz-cards').innerHTML = S.businesses.map(b => {
-      const a = activeFor(b.id); const mine = S.week.biz === b.id;
-      const parkedN = S.parked.filter(p => p.biz === b.id).length;
-      return `<div class="card ${mine ? 'lead' : ''} stack" data-biz="${b.id}">
-        <div class="row between"><div><span class="code">${esc(b.code)}</span> <h3 style="display:inline">${esc(b.name)}</h3></div><span class="pill ${mine ? 'active' : ''}">${mine ? 'has me this week' : 'maintenance'}</span></div>
-        <dl class="kv">
-          <dt>Constraint</dt><dd data-view><span>${esc(b.constraint)}</span><div class="small muted">${esc(b.evidence)}</div></dd>
-          <dt>Number</dt><dd><span>${esc(b.number)}</span> <span class="muted">· now ${esc(b.numberValue)}</span></dd>
-          <dt>Move</dt><dd>${a ? `<span>${esc(a.title)}</span><div class="small muted">${esc(a.action)}</div><div class="small muted">Review ${a.review ? esc(a.review) : 'not set'} · ${esc(a.owner)}</div>` : `<span class="muted">No active move. Make a decision to set one.</span>`}</dd>
-          <dt>Next</dt><dd class="small muted">${b.next.length ? b.next.map(esc).join('<br>') : 'none queued'}${parkedN ? `<br>${parkedN} parked idea${parkedN > 1 ? 's' : ''} waiting on these` : ''}</dd>
-        </dl>
-        <div class="row between"><button class="btn quiet" data-edit>Edit constraint and number</button><button class="btn quiet" data-move>Change the move</button></div>
-        <div class="inline" hidden data-editform>
-          <div class="form">
-            <label class="f full"><span>Binding constraint, in a sentence</span><input type="text" data-k="constraint" value="${esc(b.constraint)}"></label>
-            <label class="f full"><span>Evidence that it is binding (or that you don't know yet)</span><input type="text" data-k="evidence" value="${esc(b.evidence)}"></label>
-            <label class="f"><span>The one number</span><input type="text" data-k="number" value="${esc(b.number)}"></label>
-            <label class="f"><span>Current value</span><input type="text" data-k="numberValue" value="${esc(b.numberValue)}"></label>
-            <label class="f full"><span>Next constraints, one per line</span><textarea data-k="next">${esc(b.next.join('\n'))}</textarea></label>
-          </div>
-          <div class="row between"><span class="small muted">The move changes only through a decision.</span><button class="btn">Save</button></div>
-        </div>
-      </div>`;
-    }).join('');
-    $$('[data-biz]', $('#biz-cards')).forEach(card => {
-      const b = biz(card.dataset.biz);
-      $('[data-edit]', card).addEventListener('click', () => { const f = $('[data-editform]', card); f.hidden = !f.hidden; });
-      $('[data-move]', card).addEventListener('click', () => { showTab('decisions'); openDecisionForm({ biz: b.id }); });
-      $('[data-editform] .btn', card).addEventListener('click', () => {
-        const f = $('[data-editform]', card);
-        b.constraint = $('[data-k=constraint]', f).value.trim() || 'unknown'; b.evidence = $('[data-k=evidence]', f).value.trim();
-        b.number = $('[data-k=number]', f).value.trim(); b.numberValue = $('[data-k=numberValue]', f).value.trim() || 'unknown';
-        b.next = $('[data-k=next]', f).value.split('\n').map(s => s.trim()).filter(Boolean);
-        save(); renderAll(); toast('Saved.');
-      });
+    if (!focusBiz) focusBiz = S.week.biz;
+    $('#biz-tiles').innerHTML = S.businesses.map(b => `<div class="tile" role="button" tabindex="0" aria-pressed="${focusBiz === b.id}" data-biz="${b.id}">
+      <div class="row between"><span class="code">${esc(b.code)}</span>${S.week.biz === b.id ? '<span class="tag gold">Portfolio focus</span>' : '<span class="tag">Maintain</span>'}</div>
+      <div class="nm">${esc(b.name)}</div><div class="small muted">${esc(b.role)}</div>
+      <div class="small" style="margin-top:4px"><span class="muted">Constraint ·</span> ${b.constraint ? esc(b.constraint) : '<span class="muted">unknown</span>'}</div></div>`).join('');
+    $$('.tile', $('#biz-tiles')).forEach(t => { const go = () => { focusBiz = t.dataset.biz; renderFocus(); }; t.addEventListener('click', go); t.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); });
+
+    const b = biz(focusBiz); const a = activeFor(b.id);
+    const parkedN = S.parked.filter(p => p.biz === b.id).length;
+    $('#bet').innerHTML = `
+      <div class="ct"><span class="eyebrow">01 / Your strategic bet</span><span class="tag ${b.confirmed ? 'green' : 'amber'}">${b.confirmed ? 'Confirmed constraint' : 'Provisional constraint'}</span></div>
+      <h2>${a ? esc(a.title) : '<span class="muted">No active move. Make a decision to set one.</span>'}</h2>
+      <div class="small muted" style="margin:6px 0 16px">${esc(b.name)} · ${a ? esc(a.owner) : 'CEO'}</div>
+      <dl class="kv">
+        <dt>The constraint</dt><dd>${b.constraint ? esc(b.constraint) : '<span class="muted">Unknown. Name it, or name what you would need to see.</span>'}<div class="small muted">${esc(b.evidence)}</div></dd>
+        <dt>The number</dt><dd>${esc(b.number)}<div class="small muted">Now: ${b.numberValue ? esc(b.numberValue) : 'Unknown'}</div></dd>
+        <dt>The move</dt><dd>${a ? esc(a.action) : '<span class="muted">Not set</span>'}</dd>
+        <dt>The review</dt><dd>${a && a.review ? esc(a.review) + (new Date(a.review) < new Date() ? ' <span class="tag red">Review is due</span>' : '') : '<span class="muted">Not set</span>'}<div class="small muted">Reopen on evidence, not excitement.</div></dd>
+        <dt>Next constraints</dt><dd class="small muted">${b.next.length ? b.next.map(esc).join('<br>') : 'none queued'}${parkedN ? `<br>${parkedN} parked idea${parkedN > 1 ? 's' : ''} waiting on these` : ''}</dd>
+      </dl>
+      <div class="strip"><span>90-day outcome · ${esc(b.outcome)}</span><button class="btn link" data-setfocus>Set focus</button></div>`;
+    $('[data-setfocus]', $('#bet')).addEventListener('click', () => openFocusPanel(b));
+
+    const chal = a ? a.challenges.length : 0, met = a ? a.challenges.filter(c => c.met).length : 0;
+    $('#reality').innerHTML = `<div class="ct"><span class="eyebrow">The reality check</span><span class="tag">${b.numberValue ? 'recorded' : 'unknown'}</span></div>
+      <div class="hero num">${b.numberValue ? esc(b.numberValue) : '—'}</div>
+      <div class="small muted" style="margin-top:6px">${esc(b.number)}</div>
+      <div class="small" style="margin-top:12px">${a ? `${chal} thought${chal === 1 ? '' : 's'} argued with the move this period. ${met ? `<span style="color:var(--red)">${met} met the bar.</span>` : chal ? 'None met the bar. You stuck.' : ''}` : 'Visibility before volume.'}</div>`;
+
+    const wb = $('#week-biz'); wb.innerHTML = bizOpts(S.week.biz); $('#week-why').value = S.week.why || '';
+    $('#rev-biz').innerHTML = bizOpts(focusBiz);
+    $('#review-count').textContent = S.reviews.length ? `${S.reviews.length} saved` : '0 saved';
+    $('#review-trail').innerHTML = S.reviews.slice(0, 6).map(r => `<div class="inset small"><span class="muted num">${fmt(r.ts)} · ${esc(bizCode(r.biz))}</span> · <b style="font-weight:700">${esc(r.moved)}</b><div style="margin-top:4px">${esc(r.text)}</div></div>`).join('');
+  }
+  function openFocusPanel(b) {
+    openPanel(`<div class="pt"><div class="eyebrow">One strategic bet</div><h2>Set the baseline.</h2><p>Set the constraint and the number here. Replace a committed move through a decision so its history is preserved.</p></div>
+      <label class="f"><span>Current constraint</span><input type="text" data-k="constraint" value="${esc(b.constraint)}" placeholder="Unknown is an honest answer"></label>
+      <label class="f"><span>Evidence that it is binding</span><input type="text" data-k="evidence" value="${esc(b.evidence)}"></label>
+      <label class="f" style="flex-direction:row;align-items:center;gap:8px;text-transform:none;letter-spacing:0"><input type="checkbox" data-k="confirmed" ${b.confirmed ? 'checked' : ''} style="width:auto"> Confirmed from current operating evidence</label>
+      <label class="f"><span>One number</span><input type="text" data-k="number" value="${esc(b.number)}"></label>
+      <label class="f"><span>Current value</span><input type="text" data-k="numberValue" value="${esc(b.numberValue)}" placeholder="Unknown"></label>
+      <label class="f"><span>90-day outcome</span><input type="text" data-k="outcome" value="${esc(b.outcome)}"></label>
+      <label class="f"><span>Next constraints, one per line</span><textarea data-k="next">${esc(b.next.join('\n'))}</textarea></label>
+      <div class="foot"><span class="small muted">The move changes only through a decision.</span><button class="btn noarrow">Save focus</button></div>`);
+    const p = $('#panel');
+    $('.foot .btn', p).addEventListener('click', () => {
+      const g = k => $(`[data-k=${k}]`, p);
+      b.constraint = g('constraint').value.trim(); b.evidence = g('evidence').value.trim(); b.confirmed = g('confirmed').checked;
+      b.number = g('number').value.trim(); b.numberValue = g('numberValue').value.trim(); b.outcome = g('outcome').value.trim();
+      b.next = g('next').value.split('\n').map(s => s.trim()).filter(Boolean);
+      save(); renderAll(); closePanel(); toast('Focus updated.');
     });
-    $('#review-count').textContent = S.reviews.length ? `${S.reviews.length} saved` : 'none yet';
-    $('#review-trail').innerHTML = S.reviews.slice(0, 6).map(r => `<div class="box small"><span class="muted">${fmt(r.ts)} · ${esc(bizName(r.biz))}</span> · <b style="font-weight:600">${esc(r.moved)}</b><br>${esc(r.text)}</div>`).join('');
   }
   $('#week-biz').addEventListener('change', e => { S.week.biz = e.target.value; save(); renderAll(); });
   $('#week-why').addEventListener('change', e => { S.week.why = e.target.value; save(); });
   $('#save-review').addEventListener('click', () => {
     const text = $('#rev-text').value.trim(); if (!text) { $('#rev-text').focus(); return; }
     S.reviews.unshift({ ts: now(), biz: $('#rev-biz').value, moved: $('#rev-moved').value, text });
-    $('#rev-text').value = ''; save(); renderFocus(); toast('Saved. Existing decisions remain intact.');
+    $('#rev-text').value = ''; save(); renderFocus(); toast('Weekly review saved. Existing decisions remain intact.');
   });
+  $('#focus-new-decision').addEventListener('click', () => openDecisionForm({ biz: focusBiz }));
 
   // ---------- decisions ----------
   let decFilter = 'all', openDec = null;
   function renderDecisions() {
     const host = $('#dec-filter');
-    host.innerHTML = `<button class="chip" aria-pressed="${decFilter === 'all'}" data-b="all">All</button>` + S.businesses.map(b => `<button class="chip" aria-pressed="${decFilter === b.id}" data-b="${b.id}">${esc(b.name)}</button>`).join('');
+    host.innerHTML = `<button class="chip" aria-pressed="${decFilter === 'all'}" data-b="all">All businesses</button>` + S.businesses.map(b => `<button class="chip" aria-pressed="${decFilter === b.id}" data-b="${b.id}">${esc(b.name)}</button>`).join('');
     $$('.chip', host).forEach(c => c.addEventListener('click', () => { decFilter = c.dataset.b; renderDecisions(); }));
-    const list = S.decisions.filter(d => decFilter === 'all' || d.biz === decFilter).sort((a, b) => (a.status === 'active' ? -1 : 0) - (b.status === 'active' ? -1 : 0) || b.ts - a.ts);
+    const rank = s => s === 'active' ? 0 : s === 'standing' ? 1 : 2;
+    const list = S.decisions.filter(d => decFilter === 'all' || d.biz === decFilter).sort((a, b) => rank(a.status) - rank(b.status) || b.ts - a.ts);
     $('#decisions').innerHTML = list.length ? list.map(d => {
       const pausedBy = d.status === 'paused' ? S.decisions.find(x => x.id === d.pausedBy) : null;
       const met = d.challenges.filter(c => c.met).length, stood = d.challenges.length - met;
+      const tag = d.status === 'active' ? '<span class="tag green">Active</span>' : d.status === 'standing' ? '<span class="tag gold">Standing decision</span>' : `<span class="tag strike">Paused by ${esc(pausedBy ? pausedBy.title : 'a later decision')}</span>`;
       return `<div class="drow" data-id="${d.id}">
-        <div class="row between"><div class="row"><span class="pill ${d.status}">${d.status === 'paused' ? 'paused by ' + esc(pausedBy ? pausedBy.title : 'a later decision') : d.status}</span><span class="code">${esc((biz(d.biz) || {}).code || '')}</span><span class="small muted">${fmt(d.ts)}</span></div>
-          ${d.challenges.length ? `<span class="small muted">${stood} challenge${stood === 1 ? '' : 's'} stood${met ? `, <span style="color:var(--red)">${met} met the bar</span>` : ''}</span>` : ''}</div>
+        <div class="row between"><div class="row">${tag}<span class="small muted num">${fmt(d.ts)}</span><span class="small muted">${esc(bizName(d.biz))}</span></div>
+          ${d.challenges.length ? `<span class="small muted">${stood} stood${met ? `, <span style="color:var(--red)">${met} met the bar</span>` : ''}</span>` : ''}</div>
         <div class="t">${esc(d.title)}</div>
         <div class="muted">${esc(d.action)}</div>
-        <div class="small"><span class="eyebrow">Reconsider only if</span> <span class="muted">${esc(d.reconsider)}</span></div>
+        <div class="small" style="margin-top:6px"><span class="eyebrow grey">Reconsider only if</span> <span class="muted">${esc(d.reconsider)}</span></div>
         ${openDec === d.id ? `<div class="detail">
-          <div class="box"><span class="eyebrow">Why</span><ul class="plain">${d.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul></div>
-          <div class="grid"><div class="box"><span class="eyebrow">Explicitly not now</span><br>${d.notNow.length ? d.notNow.map(esc).join('<br>') : '<span class="muted">none named</span>'}</div>
-          <div class="box"><span class="eyebrow">Owner · review</span><br>${esc(d.owner || 'CEO')} · ${d.review ? esc(d.review) : 'no review date'}${d.hard ? '<br><span class="small" style="color:var(--amber)">Hard to reverse. 72-hour cooling-off applied.</span>' : ''}</div></div>
-          ${d.evidence ? `<div class="box"><span class="eyebrow">New evidence that replaced the prior decision</span><br>${esc(d.evidence)}${d.stops ? `<br><span class="muted">Stopped: ${esc(d.stops)}</span>` : ''}</div>` : ''}
-          <div class="box"><span class="eyebrow">Challenges from the journal</span>${d.challenges.length ? d.challenges.map(c => `<div class="challenge"><span class="pill ${c.met ? 'met' : 'notmet'}">${c.met ? 'met the bar' : 'stood'}</span><span class="small muted">${fmt(c.ts)}</span><span>${esc(c.text)}</span></div>`).join('') : '<div class="small muted">No thought has argued with this yet.</div>'}</div>
-          ${d.status !== 'paused' ? `<div class="row between"><span class="small muted">Original stays as written. A new decision replaces it.</span><button class="btn ghost" data-reconsider>Reconsider with new evidence</button></div>` : ''}
+          <div class="action-box">${esc(d.action)}</div>
+          <div class="inset"><span class="eyebrow grey">Why</span><ul class="plain">${d.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul></div>
+          <div class="grid2" style="grid-template-columns:1fr 1fr"><div class="inset"><span class="eyebrow grey">Owner / review</span><div>${esc(d.owner || 'CEO')} · ${d.review ? esc(d.review) : 'no review date'}</div>${d.hard ? '<div class="small" style="color:var(--amber)">Hard to reverse. 72-hour cooling-off applied.</div>' : ''}</div>
+          <div class="inset"><span class="eyebrow grey">Number / pass mark</span><div>${esc((biz(d.biz) || {}).number || '')}</div><div class="small muted">${d.pass ? esc(d.pass) : 'Not recorded in original'}</div></div></div>
+          <div class="inset" style="background:var(--gold-dim)"><span class="eyebrow grey">Explicitly not now</span><div>${d.notNow.length ? d.notNow.map(esc).join('<br>') : '<span class="muted">none named</span>'}</div></div>
+          ${d.evidence ? `<div class="inset"><span class="eyebrow grey">New evidence that replaced the prior decision</span><div>${esc(d.evidence)}</div>${d.stops ? `<div class="small muted">Stopped: ${esc(d.stops)}</div>` : ''}</div>` : ''}
+          <div class="inset"><span class="eyebrow grey">Challenges from the journal</span>${d.challenges.length ? d.challenges.map(c => `<div class="challenge"><span class="tag ${c.met ? 'red' : 'green'}">${c.met ? 'met the bar' : 'stood'}</span><span class="small muted num">${fmt(c.ts)}</span><span>${esc(c.text)}</span></div>`).join('') : '<div class="small muted" style="margin-top:4px">No thought has argued with this yet.</div>'}</div>
+          ${d.status !== 'paused' ? `<div class="strip"><span>Original decision preserved. A new decision replaces it.</span><button class="btn link" data-reconsider>Reconsider with new evidence</button></div>` : ''}
         </div>` : ''}
       </div>`;
     }).join('') : '<div class="muted">No decisions yet.</div>';
@@ -456,45 +560,41 @@ ul.plain { margin: 0; padding-left: 18px; }
   $('#new-decision').addEventListener('click', () => openDecisionForm({ biz: S.week.biz }));
 
   function openDecisionForm(pre) {
-    const host = $('#decision-form-host');
     const replacing = pre.replaces ? S.decisions.find(d => d.id === pre.replaces) : null;
     const current = !replacing ? activeFor(pre.biz) : null;
-    const maxDate = new Date(ago(-28)).toISOString().slice(0, 10), minDate = new Date().toISOString().slice(0, 10);
-    host.innerHTML = `<div class="card lead stack">
-      <div class="row between"><h3>${replacing ? 'Reconsider: ' + esc(replacing.title) : 'A decision, remembered'}</h3><button class="btn quiet" data-close>Close</button></div>
-      ${replacing ? `<div class="note">Original decision preserved. Record the changed evidence before replacing it.</div>` : current ? `<div class="note">${esc(bizName(pre.biz))} already has an active move: ${esc(current.title)}. Committing this pauses it and records what stops.</div>` : ''}
-      <div class="form">
-        <label class="f"><span>Business</span><select data-k="biz">${S.businesses.map(b => `<option value="${b.id}" ${pre.biz === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select></label>
-        <label class="f"><span>Kind</span><select data-k="status"><option value="active">Active move (one per business)</option><option value="standing">Standing decision (a rule)</option></select></label>
-        <label class="f full"><span>Decision <b>required</b></span><input type="text" data-k="title" value="${esc(pre.title || '')}" placeholder="What did you decide, in one line"></label>
-        <label class="f full"><span>The one action it commits to <b>required</b></span><input type="text" data-k="action" placeholder="What happens next, in one sentence"></label>
-        <label class="f full"><span>Why, one reason per line</span><textarea data-k="why"></textarea></label>
-        <label class="f full"><span>Explicitly not now, one per line</span><textarea data-k="notNow" placeholder="What this rules out"></textarea></label>
-        <label class="f full"><span>Reconsider only if <b>required</b></span><input type="text" data-k="reconsider" placeholder="The evidence that would justify reopening. Not a feeling."></label>
-        ${replacing || current ? `<label class="f full"><span>New evidence <b>required</b></span><input type="text" data-k="evidence" placeholder="What changed in reality"></label><label class="f full"><span>What stops <b>required</b></span><input type="text" data-k="stops" value="${esc((replacing || current).action)}"></label>` : ''}
-        <label class="f"><span>Owner</span><input type="text" data-k="owner" value="CEO"></label>
-        <label class="f"><span>Review date (within 4 weeks)</span><input type="date" data-k="review" min="${minDate}" max="${maxDate}"></label>
-        <label class="f full row" style="flex-direction:row;align-items:center"><input type="checkbox" data-k="hard" style="width:auto"> <span>Hard to reverse. Apply a 72-hour cooling-off before it becomes active.</span></label>
-      </div>
-      <div class="row between"><span class="err" data-err></span><button class="btn">${replacing || current ? 'Commit and pause the prior move' : 'Commit'}</button></div>
-    </div>`;
-    host.scrollIntoView({ block: 'start' });
-    $('[data-close]', host).addEventListener('click', () => host.innerHTML = '');
-    $('.form + .row .btn', host).addEventListener('click', () => {
-      const g = k => { const el = $(`[data-k=${k}]`, host); return el ? (el.type === 'checkbox' ? el.checked : el.value.trim()) : ''; };
+    const maxDate = iso(ago(-28)), minDate = iso(now());
+    openPanel(`<div class="pt"><div class="eyebrow">${replacing ? 'Reconsider on evidence' : 'From noise to a move'}</div><h2>${replacing ? 'Replace: ' + esc(replacing.title) : 'Protect one move.'}</h2>
+      <p>${replacing ? 'Original decision preserved. Record the changed evidence before replacing it.' : current ? `${esc(bizName(pre.biz))} already has an active move. Committing this pauses it and records what stops.` : 'Finish with one action. Make the exclusions explicit.'}</p></div>
+      <label class="f"><span>Business</span><select data-k="biz">${bizOpts(pre.biz)}</select></label>
+      <label class="f"><span>Kind</span><select data-k="status"><option value="active">Active move (one per business)</option><option value="standing">Standing decision (a rule)</option></select></label>
+      <label class="f"><span>Decision <b>required</b></span><input type="text" data-k="title" value="${esc(pre.title || '')}" placeholder="What did you decide, in one line"></label>
+      <label class="f"><span>One executable action <b>required</b></span><input type="text" data-k="action" placeholder="What happens next, in one sentence"></label>
+      <label class="f"><span>Why, one reason per line</span><textarea data-k="why"></textarea></label>
+      <label class="f"><span>Explicitly not now, one per line</span><textarea data-k="notNow" placeholder="What this rules out"></textarea></label>
+      <label class="f"><span>Reconsider only if <b>required</b></span><input type="text" data-k="reconsider" placeholder="New evidence, constraint moves, fair test fails…"></label>
+      <label class="f"><span>Pass mark</span><input type="text" data-k="pass" placeholder="What must be true by the review?"></label>
+      ${replacing || current ? `<label class="f"><span>New evidence <b>required</b></span><input type="text" data-k="evidence" placeholder="What changed in reality"></label><label class="f"><span>What stops <b>required</b></span><input type="text" data-k="stops" value="${esc((replacing || current).action)}"></label>` : ''}
+      <div class="form"><label class="f"><span>Owner</span><input type="text" data-k="owner" value="CEO"></label><label class="f"><span>Review, within 4 weeks</span><input type="date" data-k="review" min="${minDate}" max="${maxDate}"></label></div>
+      <label class="f" style="flex-direction:row;align-items:center;gap:8px;text-transform:none;letter-spacing:0"><input type="checkbox" data-k="hard" style="width:auto"> Hard to reverse. Apply a 72-hour cooling-off.</label>
+      <div class="errbox" hidden data-err></div>
+      <div class="foot"><span class="small muted">The prior decision remains in memory.</span><button class="btn noarrow">${replacing || current ? 'Commit and pause the prior move' : 'Commit this move'}</button></div>`);
+    const p = $('#panel');
+    $('.foot .btn', p).addEventListener('click', () => {
+      const g = k => { const el = $(`[data-k=${k}]`, p); return el ? (el.type === 'checkbox' ? el.checked : el.value.trim()) : ''; };
       const errs = [];
       if (!g('title')) errs.push('decision'); if (!g('action')) errs.push('action'); if (!g('reconsider')) errs.push('reconsider condition');
       if ((replacing || current) && (!g('evidence') || !g('stops'))) errs.push('new evidence and what stops');
-      if (errs.length) { $('[data-err]', host).textContent = 'Required: ' + errs.join(', ') + '.'; return; }
+      const err = $('[data-err]', p);
+      if (errs.length) { err.hidden = false; err.textContent = 'Required: ' + errs.join(', ') + '.'; return; }
       const status = g('status'); const b = g('biz');
-      const d = { id: uid(), ts: now(), biz: b, status, title: g('title'), action: g('action'), why: g('why').split('\n').map(s => s.trim()).filter(Boolean), notNow: g('notNow').split('\n').map(s => s.trim()).filter(Boolean), reconsider: g('reconsider'), review: g('review'), owner: g('owner') || 'CEO', hard: g('hard'), challenges: [], evidence: g('evidence'), stops: g('stops'), from: pre.from };
+      const d = { id: uid(), ts: now(), biz: b, status, title: g('title'), action: g('action'), why: g('why').split('\n').map(s => s.trim()).filter(Boolean), notNow: g('notNow').split('\n').map(s => s.trim()).filter(Boolean), reconsider: g('reconsider'), pass: g('pass'), review: g('review'), owner: g('owner') || 'CEO', hard: g('hard'), challenges: [], evidence: g('evidence'), stops: g('stops'), from: pre.from };
       const prior = replacing || (status === 'active' ? activeFor(b) : null);
       if (prior) { prior.status = 'paused'; prior.pausedBy = d.id; }
       if (status === 'active') { const other = activeFor(b); if (other && other !== prior) { other.status = 'paused'; other.pausedBy = d.id; } }
       S.decisions.unshift(d);
       if (pre.from) { const e = S.entries.find(x => x.id === pre.from); if (e) e.lifted = 'decision'; }
-      if (pre.parkedId) S.parked = S.parked.filter(p => p.id !== pre.parkedId);
-      host.innerHTML = ''; openDec = d.id; save(); renderAll();
+      if (pre.parkedId) S.parked = S.parked.filter(x => x.id !== pre.parkedId);
+      openDec = d.id; focusBiz = b; save(); renderAll(); closePanel(); showTab('decisions');
       toast(d.hard ? 'Committed. Cooling off for 72 hours.' : 'Committed. The prior decision remains in memory.');
     });
   }
@@ -503,14 +603,14 @@ ul.plain { margin: 0; padding-left: 18px; }
   function renderParked() {
     const host = $('#parked');
     host.innerHTML = S.parked.length ? S.parked.map(p => `<div class="prow" data-id="${p.id}">
-      <div class="row between"><div class="row"><span class="code">${esc((biz(p.biz) || {}).code || '')}</span><span class="small muted">parked ${fmt(p.ts)}</span></div><span class="pill">waits on: ${esc(p.constraint)}</span></div>
-      <div style="font-family:var(--display);font-size:17px">${esc(p.title)}</div>
-      <div class="small"><span class="eyebrow">Revisit only when</span> <span class="muted">${esc(p.trigger)}</span></div>
-      <div class="row"><button class="btn quiet" data-promote>Trigger met, promote through a decision</button><button class="btn quiet" data-drop>Let it go</button><span class="small muted" hidden data-confirm>Sure? <button class="btn quiet" data-yes>Yes, drop it</button></span></div>
+      <div class="row between"><div class="row"><span class="tag">${esc(bizCode(p.biz))}</span><span class="small muted num">parked ${fmt(p.ts)}</span></div><span class="tag amber">waits on · ${esc(p.constraint)}</span></div>
+      <div class="t">${esc(p.title)}</div>
+      <div class="small"><span class="eyebrow grey">Revisit only when</span> <span class="muted">${esc(p.trigger)}</span></div>
+      <div class="row" style="margin-top:4px"><button class="btn link" data-promote>Trigger met, promote through a decision</button><button class="btn quiet" data-drop>Let it go</button><span class="small muted" hidden data-confirm>Sure? <button class="btn quiet" data-yes>Yes, drop it</button></span></div>
     </div>`).join('') : '<div class="muted">Nothing parked. When an idea pulls at you mid-work, park it from the journal.</div>';
     $$('.prow', host).forEach(el => {
       const p = S.parked.find(x => x.id === el.dataset.id);
-      $('[data-promote]', el).addEventListener('click', () => { showTab('decisions'); openDecisionForm({ biz: p.biz, title: p.title, parkedId: p.id }); });
+      $('[data-promote]', el).addEventListener('click', () => openDecisionForm({ biz: p.biz, title: p.title, parkedId: p.id }));
       $('[data-drop]', el).addEventListener('click', () => { $('[data-confirm]', el).hidden = false; });
       $('[data-yes]', el).addEventListener('click', () => { S.parked = S.parked.filter(x => x.id !== p.id); save(); renderAll(); toast('Dropped.'); });
     });
